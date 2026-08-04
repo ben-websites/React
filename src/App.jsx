@@ -49,7 +49,7 @@ function App() {
 
             {/* Hide navbar and footer on admin pages */}
             {window.location.pathname.startsWith("/admin") ? null : <Navbar />}
-            
+            {window.location.pathname.startsWith("/admin") ? null : <Footer />}
             <main>
 
               <Routes>
@@ -194,7 +194,6 @@ function App() {
 
             </main>
 
-            {!window.location.pathname.startsWith("/admin") && <Footer />}
 
           </div>
 
