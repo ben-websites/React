@@ -48,19 +48,19 @@ function Contact() {
             <p className="flex items-center gap-3 font-bold text-slate-950">
               <FontAwesomeIcon icon={faEnvelope} className="text-emerald-700" /> Email
             </p>
-            <p className="mt-2 text-slate-600">hello@benstore.com</p>
+            <a className="mt-2 text-slate-600" href="mailto:sabihuddin309@gmail.com">sabihuddin309gmail.com</a>
           </div>
           <div className="rounded-lg border border-stone-200 bg-white p-5 shadow-sm shadow-stone-200/60">
             <p className="flex items-center gap-3 font-bold text-slate-950">
               <FontAwesomeIcon icon={faPhone} className="text-emerald-700" /> Phone
             </p>
-            <p className="mt-2 text-slate-600">+92 300 0000000</p>
+            <a className="mt-2 text-slate-600" href="tel:+923001234567">+92 324 2244688</a>
           </div>
           <div className="rounded-lg border border-stone-200 bg-white p-5 shadow-sm shadow-stone-200/60">
             <p className="flex items-center gap-3 font-bold text-slate-950">
               <FontAwesomeIcon icon={faLocationDot} className="text-emerald-700" /> Location
             </p>
-            <p className="mt-2 text-slate-600">Karachi, Pakistan</p>
+            <p className="mt-2 text-slate-600">Korangi,Karachi,Pakistan</p>
           </div>
         </div>
 
