@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 import { ProductContext } from './ProductsDataContext'
 
-const API_URL = "http://localhost:3000/products";
+const API_URL = "https://bens-store.vercel.app/products";
 
 export function ProductProvider({ children }) {
   const [products, setProducts] = useState([])
