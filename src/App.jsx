@@ -47,9 +47,10 @@ function App() {
 
           <div className="min-h-screen bg-[#f8f5ef] text-slate-900">
 
-            {/* Hide Navbar on Admin Pages */}
+            {/* Hide navbar and footer on admin pages */}
             {window.location.pathname.startsWith("/admin") ? null : <Navbar />}
-
+            {window.location.pathname.startsWith("/admin") ? null : <Footer />}
+            
             <main>
 
               <Routes>
