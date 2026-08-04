@@ -54,7 +54,7 @@ function Contact() {
             <p className="flex items-center gap-3 font-bold text-slate-950">
               <FontAwesomeIcon icon={faPhone} className="text-emerald-700" /> Phone
             </p>
-            <a className="mt-2 text-slate-600" href="tel:+923001234567">+92 324 2244688</a>
+            <a className="mt-2 text-slate-600" href="tel:+923242244688">+92 324 2244688</a>
           </div>
           <div className="rounded-lg border border-stone-200 bg-white p-5 shadow-sm shadow-stone-200/60">
             <p className="flex items-center gap-3 font-bold text-slate-950">
