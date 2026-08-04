@@ -45,12 +45,11 @@ function App() {
       <ProductProvider>
         <CartProvider>
 
-          <div className="min-h-screen bg-[#f8f5ef] text-slate-900">
+          <div className="min-h-screen flex flex-col bg-[#f8f5ef] text-slate-900">
 
             {/* Hide navbar and footer on admin pages */}
             {window.location.pathname.startsWith("/admin") ? null : <Navbar />}
-            {window.location.pathname.startsWith("/admin") ? null : <Footer />}
-            <main>
+            <main className="flex-1">
 
               <Routes>
 
@@ -194,6 +193,7 @@ function App() {
 
             </main>
 
+            {window.location.pathname.startsWith("/admin") ? null : <Footer />}
 
           </div>
 
