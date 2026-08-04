@@ -19,15 +19,24 @@ function Footer() {
         </div>
         <div className="space-y-3 text-sm text-slate-300">
           <h2 className="text-xl font-black text-white">Contact</h2>
-          <a className="flex items-center gap-3" href="mailto:sabihuddin309@gmail.com">
-            <FontAwesomeIcon icon={faEnvelope} /> sabihuddin309@gmail.com
-          </a>
-          <a className="flex items-center gap-3 href="tel:+923242244688">
-            <FontAwesomeIcon icon={faPhone} /> +92 324 2244688
-          </a>
-          <p className="flex items-center gap-3">
-            <FontAwesomeIcon icon={faLocationDot} />  Korangi, Karachi, Pakistan
-          </p>
+          <a
+  href="mailto:sabihuddin309@gmail.com"
+  className="flex items-center gap-3"
+>
+  <FontAwesomeIcon icon={faEnvelope} />
+  <span>sabihuddin309@gmail.com</span>
+</a>
+          <a
+  href="tel:+923242244688"
+  className="flex items-center gap-3"
+>
+  <FontAwesomeIcon icon={faPhone} />
+  <span>+92 324 2244688</span>
+</a>
+          <div className="flex items-center gap-3">
+  <FontAwesomeIcon icon={faLocationDot} />
+  <span>Korangi, Karachi, Pakistan</span>
+</div>
         </div>
       </div>
       <div className="border-t border-slate-800 px-4 py-4 text-center text-sm text-slate-400">
