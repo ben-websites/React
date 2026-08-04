@@ -13,12 +13,12 @@ function Footer() {
 
       <div className="mx-auto grid max-w-7xl gap-10 px-6 py-14 md:grid-cols-2 lg:grid-cols-5">
 
-        {/* Brand */}
+      
 
         <div>
 
           <h2 className="text-3xl font-black text-emerald-400">
-            Ben Store
+            Ben's Store
           </h2>
 
           <p className="mt-4 text-sm leading-7 text-slate-300">
@@ -27,8 +27,6 @@ function Footer() {
           </p>
 
         </div>
-
-        {/* Quick Links */}
 
         <div>
 
@@ -71,9 +69,6 @@ function Footer() {
           </ul>
 
         </div>
-
-        {/* Customer Service */}
-
         <div>
 
           <h3 className="mb-5 text-xl font-bold">
@@ -95,8 +90,6 @@ function Footer() {
           </ul>
 
         </div>
-
-        {/* Categories */}
 
         <div>
 
