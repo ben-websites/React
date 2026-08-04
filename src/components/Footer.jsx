@@ -8,6 +8,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 
 function Footer() {
+
+ const location = useLocation();
+
+  if (location.pathname.startsWith("/admin")) {
+    return null;
+  }
+  
   return (
     <footer className="mt-20 bg-slate-950 text-white">
 
