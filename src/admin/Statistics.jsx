@@ -46,7 +46,7 @@ function Statistics() {
         <div className="rounded-xl bg-white p-6 shadow">
           <h3 className="text-slate-500">Revenue</h3>
           <p className="mt-3 text-3xl font-black text-emerald-700">
-            Rs. {stats.totalRevenue}
+             ${stats.totalRevenue}
           </p>
         </div>
 
@@ -190,7 +190,7 @@ function Statistics() {
                 <td>{customer.totalOrders}</td>
 
                 <td>
-                  Rs. {customer.totalSpent}
+                   ${customer.totalSpent}
                 </td>
 
               </tr>
@@ -246,7 +246,7 @@ function Statistics() {
                 <td>{order.orderStatus}</td>
 
                 <td>
-                  Rs. {order.totalAmount}
+                   ${order.totalAmount}
                 </td>
 
               </tr>
