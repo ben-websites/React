@@ -4,13 +4,6 @@ import {
   faPhone,
 } from "@fortawesome/free-solid-svg-icons";
 
-import {
-  faFacebook,
-  faInstagram,
-  faTwitter,
-  faLinkedin,
-} from "@fortawesome/free-solid-svg-icons";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 
@@ -32,38 +25,6 @@ function Footer() {
             Ben Store offers premium fashion, clothing, shoes and accessories
             with quality, affordability and fast delivery across Pakistan.
           </p>
-
-          <div className="mt-6 flex gap-4 text-xl">
-
-            <a href="#">
-              <FontAwesomeIcon
-                icon={faFacebook}
-                className="transition hover:text-emerald-400"
-              />
-            </a>
-
-            <a href="#">
-              <FontAwesomeIcon
-                icon={faInstagram}
-                className="transition hover:text-emerald-400"
-              />
-            </a>
-
-            <a href="#">
-              <FontAwesomeIcon
-                icon={faTwitter}
-                className="transition hover:text-emerald-400"
-              />
-            </a>
-
-            <a href="#">
-              <FontAwesomeIcon
-                icon={faLinkedin}
-                className="transition hover:text-emerald-400"
-              />
-            </a>
-
-          </div>
 
         </div>
 
