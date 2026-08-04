@@ -6,7 +6,11 @@ import {
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
-
+import {
+  NavLink,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
 function Footer() {
 
  const location = useLocation();
