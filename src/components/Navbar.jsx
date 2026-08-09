@@ -18,6 +18,7 @@ import {
   faRightFromBracket,
   faGaugeHigh,
   faUser,
+  faPenToSquare,
 } from "@fortawesome/free-solid-svg-icons";
 
 import axios from "axios";
@@ -52,6 +53,8 @@ const links = [
 
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+
+  const [profileOpen, setProfileOpen] = useState(false);
 
   const [settings, setSettings] = useState({
     storeName: "Ben Store",
@@ -116,7 +119,7 @@ function Navbar() {
 
   return (
     <nav className="sticky top-0 z-50 border-b border-stone-200 bg-white shadow-sm">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+  <div className="relative mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
 
         {/* Logo */}
 
@@ -252,20 +255,108 @@ function Navbar() {
           {/* User */}
 
           {token && (
-            <>
-              <div className="inline-flex items-center gap-2 rounded bg-white px-4 py-2 text-sm font-semibold text-slate-800">
-                <FontAwesomeIcon icon={faUser} />
-                {name}
-              </div>
+  <>
+    {/* USER PROFILE BUTTON */}
 
-              <button
-                onClick={handleLogout}
-                className="inline-flex items-center gap-2 rounded bg-red-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-700"
-              >
-                <FontAwesomeIcon icon={faRightFromBracket} />
-                Logout
-              </button>
-            </>
+    <button
+      type="button"
+      onClick={() => setProfileOpen(!profileOpen)}
+      className="inline-flex items-center gap-2 rounded-lg bg-white px-4 py-2 text-sm font-semibold text-slate-800 transition hover:bg-stone-100"
+    >
+      {localStorage.getItem("profilePic") ? (
+        <img
+          src={localStorage.getItem("profilePic")}
+          alt="Profile"
+          className="h-7 w-7 rounded-full object-cover"
+        />
+      ) : (
+        <FontAwesomeIcon icon={faUser} />
+      )}
+
+      {name}
+
+      <span className="text-xs">▼</span>
+    </button>
+
+    {/* PROFILE POPUP */}
+
+    {profileOpen && (
+      <div className="absolute right-28 top-16 z-[100] w-80 rounded-xl border border-stone-200 bg-white p-5 shadow-2xl">
+
+        <div className="flex items-center gap-4 border-b border-stone-200 pb-4">
+
+          {localStorage.getItem("profilePic") ? (
+            <img
+              src={localStorage.getItem("profilePic")}
+              alt="Profile"
+              className="h-16 w-16 rounded-full object-cover"
+            />
+          ) : (
+            <div className="grid h-16 w-16 place-items-center rounded-full bg-emerald-100 text-emerald-700">
+              <FontAwesomeIcon
+                icon={faUser}
+                className="text-2xl"
+              />
+            </div>
+          )}
+
+          <div>
+            <h3 className="text-lg font-black text-slate-950">
+              {localStorage.getItem("name")}
+            </h3>
+
+            <p className="text-sm text-slate-500">
+              Customer
+            </p>
+          </div>
+
+        </div>
+
+        <div className="space-y-3 py-4">
+
+          <div>
+            <p className="text-xs font-semibold text-slate-400">
+              Name
+            </p>
+
+            <p className="font-semibold text-slate-800">
+              {localStorage.getItem("name")}
+            </p>
+          </div>
+
+          <div>
+            <p className="text-xs font-semibold text-slate-400">
+              Email
+            </p>
+
+            <p className="font-semibold text-slate-800">
+              {localStorage.getItem("email")}
+            </p>
+          </div>
+
+        </div>
+
+        <button
+          type="button"
+          onClick={() => navigate("/profile/edit")}
+          className="flex w-full items-center justify-center gap-2 rounded-lg bg-emerald-700 px-4 py-3 font-bold text-white transition hover:bg-emerald-800"
+        >
+          <FontAwesomeIcon icon={faPenToSquare} />
+          Edit Profile
+        </button>
+
+      </div>
+    )}
+
+    <button
+      onClick={handleLogout}
+      className="inline-flex items-center gap-2 rounded bg-red-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-700"
+    >
+      <FontAwesomeIcon icon={faRightFromBracket} />
+      Logout
+    </button>
+  </>
+)}
           )}
         </div>
       </div>
