@@ -160,8 +160,9 @@ function App() {
                    path="/profile/edit"
                    element={
                      <UserRoute>
-                      <EditProfile />}
+                      <EditProfile />
                     </UserRoute>
+                   }
                />
                 <Route
                   path="*"
