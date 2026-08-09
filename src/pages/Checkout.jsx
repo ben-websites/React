@@ -7,6 +7,20 @@ import { Navigate } from "react-router-dom";
 
 function Checkout() {
   const navigate = useNavigate();
+  const [showCardPopup, setShowCardPopup] = useState(false);
+
+const [cardDetails, setCardDetails] = useState({
+  cardName: "",
+  cardNumber: "",
+  expiry: "",
+  cvv: "",
+});
+  const handleCardChange = (e) => {
+  setCardDetails({
+    ...cardDetails,
+    [e.target.name]: e.target.value,
+  });
+};
 
   const { cartItems, clearCart } = useCart();
 
@@ -129,19 +143,26 @@ function Checkout() {
             required
           />
 
-          <select
-            name="paymentMethod"
-            value={form.paymentMethod}
-            onChange={handleChange}
-            className="w-full rounded-lg border p-3"
-          >
-             <option value="Cash on Delivery">
-               Cash on Delivery
-             </option>
-             <option value="Card">
-              Card Payment
-             </option>
-          </select>
+         <select
+  name="paymentMethod"
+  value={form.paymentMethod}
+  onChange={(e) => {
+    handleChange(e);
+
+    if (e.target.value === "Card") {
+      setShowCardPopup(true);
+    }
+  }}
+  className="w-full rounded-lg border p-3"
+>
+  <option value="Cash on Delivery">
+    Cash on Delivery
+  </option>
+
+  <option value="Card">
+    Card
+  </option>
+</select>
 
           <button
             type="submit"
@@ -195,6 +216,121 @@ function Checkout() {
         </div>
 
       </div>
+
+      {showCardPopup && (
+  <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 px-4">
+
+    <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl">
+
+      <div className="mb-6 flex items-center justify-between">
+        <h2 className="text-2xl font-black text-slate-950">
+          Card Details
+        </h2>
+
+        <button
+          type="button"
+          onClick={() => {
+            setShowCardPopup(false);
+            setForm({
+              ...form,
+              paymentMethod: "Cash on Delivery",
+            });
+          }}
+          className="text-2xl font-bold text-slate-500 hover:text-red-600"
+        >
+          ×
+        </button>
+      </div>
+
+      <div className="space-y-4">
+
+        <div>
+          <label className="mb-1 block font-semibold">
+            Cardholder Name
+          </label>
+
+          <input
+            type="text"
+            name="cardName"
+            value={cardDetails.cardName}
+            onChange={handleCardChange}
+            placeholder="Name on card"
+            className="w-full rounded-lg border border-stone-300 p-3 outline-none focus:border-emerald-700"
+            required
+          />
+        </div>
+
+        <div>
+          <label className="mb-1 block font-semibold">
+            Card Number
+          </label>
+
+          <input
+            type="text"
+            name="cardNumber"
+            value={cardDetails.cardNumber}
+            onChange={handleCardChange}
+            placeholder="1234 5678 9012 3456"
+            maxLength="19"
+            className="w-full rounded-lg border border-stone-300 p-3 outline-none focus:border-emerald-700"
+            required
+          />
+        </div>
+
+        <div className="grid grid-cols-2 gap-4">
+
+          <div>
+            <label className="mb-1 block font-semibold">
+              Expiry Date
+            </label>
+
+            <input
+              type="text"
+              name="expiry"
+              value={cardDetails.expiry}
+              onChange={handleCardChange}
+              placeholder="MM/YY"
+              maxLength="5"
+              className="w-full rounded-lg border border-stone-300 p-3 outline-none focus:border-emerald-700"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="mb-1 block font-semibold">
+              CVV
+            </label>
+
+            <input
+              type="password"
+              name="cvv"
+              value={cardDetails.cvv}
+              onChange={handleCardChange}
+              placeholder="•••"
+              maxLength="4"
+              className="w-full rounded-lg border border-stone-300 p-3 outline-none focus:border-emerald-700"
+              required
+            />
+          </div>
+
+        </div>
+
+        <button
+          type="button"
+          onClick={() => {
+            setShowCardPopup(false);
+            toast.success("Card details added");
+          }}
+          className="mt-3 w-full rounded-lg bg-emerald-700 py-3 font-bold text-white hover:bg-emerald-800"
+        >
+          Continue
+        </button>
+
+      </div>
+
+    </div>
+  </div>
+)}
 
     </section>
   );
