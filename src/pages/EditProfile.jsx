@@ -30,7 +30,15 @@ function EditProfile() {
   const [profilePic, setProfilePic] = useState(null);
   const [preview, setPreview] = useState("");
 
+  // =========================
+  // GET PROFILE
+  // =========================
   useEffect(() => {
+    if (!userId) {
+      navigate("/login");
+      return;
+    }
+
     fetchProfile();
   }, []);
 
@@ -55,13 +63,19 @@ function EditProfile() {
         setPreview(user.profilePic || "");
       }
     } catch (error) {
-      console.log(error);
-      toast.error("Unable to load profile");
+      console.log("Profile error:", error);
+
+      toast.error(
+        error.response?.data?.message || "Unable to load profile"
+      );
     } finally {
       setLoading(false);
     }
   };
 
+  // =========================
+  // INPUT CHANGE
+  // =========================
   const handleChange = (e) => {
     setForm({
       ...form,
@@ -69,10 +83,19 @@ function EditProfile() {
     });
   };
 
+  // =========================
+  // IMAGE CHANGE
+  // =========================
   const handleImageChange = (e) => {
     const file = e.target.files[0];
 
     if (!file) return;
+
+    // Only allow images
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please select an image");
+      return;
+    }
 
     setProfilePic(file);
 
@@ -80,6 +103,9 @@ function EditProfile() {
     setPreview(imageUrl);
   };
 
+  // =========================
+  // UPDATE PROFILE
+  // =========================
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -88,8 +114,8 @@ function EditProfile() {
 
       const formData = new FormData();
 
+      // Email is intentionally NOT included
       formData.append("name", form.name);
-      formData.append("email", form.email);
       formData.append("phone", form.phone);
       formData.append("address", form.address);
       formData.append("city", form.city);
@@ -107,23 +133,27 @@ function EditProfile() {
       if (res.data.success) {
         toast.success("Profile updated successfully");
 
-        // Keep only basic login information locally.
+        // Only basic information stays in localStorage
         localStorage.setItem("name", res.data.data.name);
         localStorage.setItem("email", res.data.data.email);
 
         navigate("/");
       }
     } catch (error) {
-      console.log(error);
+      console.log("Update profile error:", error);
 
       toast.error(
-        error.response?.data?.message || "Unable to update profile"
+        error.response?.data?.message ||
+          "Unable to update profile"
       );
     } finally {
       setSaving(false);
     }
   };
 
+  // =========================
+  // LOADING
+  // =========================
   if (loading) {
     return (
       <section className="min-h-screen bg-stone-50 px-6 py-16">
@@ -140,19 +170,20 @@ function EditProfile() {
     <section className="min-h-screen bg-stone-50 px-6 py-12">
       <div className="mx-auto max-w-3xl">
 
-        {/* Back */}
+        {/* Back Button */}
         <button
           type="button"
           onClick={() => navigate("/")}
-          className="mb-8 inline-flex items-center gap-2 font-semibold text-emerald-700 hover:text-emerald-900"
+          className="mb-8 inline-flex items-center gap-2 font-semibold text-emerald-700 transition hover:text-emerald-900"
         >
           <FontAwesomeIcon icon={faArrowLeft} />
           Back
         </button>
 
-        {/* Card */}
+        {/* Main Card */}
         <div className="rounded-2xl border border-stone-200 bg-white p-6 shadow-xl md:p-8">
 
+          {/* Heading */}
           <div className="mb-8">
             <h1 className="text-3xl font-black text-slate-950">
               Edit Profile
@@ -165,7 +196,7 @@ function EditProfile() {
 
           <form onSubmit={handleSubmit}>
 
-            {/* Profile Picture */}
+            {/* ================= PROFILE IMAGE ================= */}
             <div className="mb-8 flex flex-col items-center">
 
               <div className="relative">
@@ -185,6 +216,7 @@ function EditProfile() {
                   </div>
                 )}
 
+                {/* Camera */}
                 <label
                   htmlFor="profilePic"
                   className="absolute bottom-1 right-1 grid h-10 w-10 cursor-pointer place-items-center rounded-full bg-emerald-700 text-white shadow-lg transition hover:bg-emerald-800"
@@ -208,9 +240,10 @@ function EditProfile() {
 
             </div>
 
-            {/* Name + Email */}
+            {/* ================= NAME + EMAIL ================= */}
             <div className="grid gap-5 md:grid-cols-2">
 
+              {/* Name */}
               <div>
                 <label className="mb-2 block font-bold text-slate-950">
                   Name
@@ -226,6 +259,7 @@ function EditProfile() {
                 />
               </div>
 
+              {/* Email - LOCKED */}
               <div>
                 <label className="mb-2 block font-bold text-slate-950">
                   Email
@@ -233,18 +267,21 @@ function EditProfile() {
 
                 <input
                   type="email"
-                  name="email"
                   value={form.email}
-                  onChange={handleChange}
-                  required
-                  className="w-full rounded-lg border border-stone-300 bg-stone-100 px-4 py-3 outline-none"
+                  disabled
+                  className="w-full cursor-not-allowed rounded-lg border border-stone-300 bg-stone-100 px-4 py-3 text-slate-500 outline-none"
                 />
+
+                <p className="mt-1 text-xs text-slate-400">
+                  Email address cannot be changed.
+                </p>
               </div>
 
             </div>
 
-            {/* Phone */}
+            {/* ================= PHONE ================= */}
             <div className="mt-5">
+
               <label className="mb-2 block font-bold text-slate-950">
                 Phone Number
               </label>
@@ -257,10 +294,12 @@ function EditProfile() {
                 placeholder="+92 300 0000000"
                 className="w-full rounded-lg border border-stone-300 px-4 py-3 outline-none transition focus:border-emerald-700"
               />
+
             </div>
 
-            {/* Address */}
+            {/* ================= ADDRESS ================= */}
             <div className="mt-5">
+
               <label className="mb-2 block font-bold text-slate-950">
                 Address
               </label>
@@ -273,12 +312,15 @@ function EditProfile() {
                 placeholder="Enter your complete address"
                 className="w-full rounded-lg border border-stone-300 px-4 py-3 outline-none transition focus:border-emerald-700"
               />
+
             </div>
 
-            {/* City + Postal */}
+            {/* ================= CITY + POSTAL ================= */}
             <div className="mt-5 grid gap-5 md:grid-cols-2">
 
+              {/* City */}
               <div>
+
                 <label className="mb-2 block font-bold text-slate-950">
                   City
                 </label>
@@ -291,9 +333,12 @@ function EditProfile() {
                   placeholder="Karachi"
                   className="w-full rounded-lg border border-stone-300 px-4 py-3 outline-none transition focus:border-emerald-700"
                 />
+
               </div>
 
+              {/* Postal Code */}
               <div>
+
                 <label className="mb-2 block font-bold text-slate-950">
                   Postal Code
                 </label>
@@ -306,11 +351,12 @@ function EditProfile() {
                   placeholder="74000"
                   className="w-full rounded-lg border border-stone-300 px-4 py-3 outline-none transition focus:border-emerald-700"
                 />
+
               </div>
 
             </div>
 
-            {/* Buttons */}
+            {/* ================= BUTTONS ================= */}
             <div className="mt-8 flex gap-4">
 
               <button
