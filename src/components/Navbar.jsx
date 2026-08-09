@@ -118,6 +118,7 @@ function Navbar() {
       localStorage.removeItem("name");
       localStorage.removeItem("email");
       localStorage.removeItem("userId");
+      localStorage.removeItem("profilePic");
 
       setProfileOpen(false);
       setMenuOpen(false);
