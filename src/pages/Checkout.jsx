@@ -136,6 +136,7 @@ function Checkout() {
             className="w-full rounded-lg border p-3"
           >
             <option>Cash on Delivery</option>
+            <option>Card Payment</option>
           </select>
 
           <button
