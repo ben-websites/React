@@ -38,7 +38,7 @@ function AdminSettings() {
   async function fetchSettings() {
     try {
       const res = await axios.get(
-        "http://localhost:3000/settings"
+        "http://bens-store.vercel.app/settings"
       );
 
       if (res.data.success) {
