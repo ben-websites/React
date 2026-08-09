@@ -272,18 +272,26 @@ function Navbar() {
           {token && (
             <>
               <button
-                type="button"
-                onClick={() => setProfileOpen(!profileOpen)}
-                className="inline-flex items-center gap-2 rounded-lg bg-white px-4 py-2 text-sm font-semibold text-slate-800 transition hover:bg-stone-100"
-              >
-                <FontAwesomeIcon icon={faUser} />
+  type="button"
+  onClick={() => setProfileOpen(!profileOpen)}
+  className="inline-flex items-center gap-2 rounded-lg bg-white px-4 py-2 text-sm font-semibold text-slate-800 transition hover:bg-stone-100"
+>
+  {profilePic ? (
+    <img
+      src={profilePic}
+      alt="Profile"
+      className="h-7 w-7 rounded-full object-cover"
+    />
+  ) : (
+    <FontAwesomeIcon icon={faUser} />
+  )}
 
-                {name || "User"}
+  {name || "User"}
 
-                <span className="text-xs">
-                  {profileOpen ? "▲" : "▼"}
-                </span>
-              </button>
+  <span className="text-xs">
+    {profileOpen ? "▲" : "▼"}
+  </span>
+</button>
 
               {/* PROFILE POPUP */}
 
