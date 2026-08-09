@@ -85,11 +85,7 @@ function AdminSettings() {
   }
 
   if (loading) {
-    return (
-      <div className="flex min-h-[400px] items-center justify-center">
-        <p className="text-slate-500">Loading settings...</p>
-      </div>
-    );
+    return  <Loader />;
   }
 
   return (
