@@ -3,6 +3,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import {
   faArrowLeft,
   faCamera,
@@ -30,19 +31,20 @@ function EditProfile() {
   const [profilePic, setProfilePic] = useState(null);
   const [preview, setPreview] = useState("");
 
-  // =========================
-  // GET PROFILE
-  // =========================
+  // =====================================
+  // FETCH EXISTING USER PROFILE
+  // =====================================
+
   useEffect(() => {
     if (!userId) {
       navigate("/login");
       return;
     }
 
-    fetchProfile();
+    getProfile();
   }, []);
 
-  const fetchProfile = async () => {
+  const getProfile = async () => {
     try {
       const res = await axios.get(
         `https://bens-store.vercel.app/profile/${userId}`
@@ -51,6 +53,7 @@ function EditProfile() {
       if (res.data.success) {
         const user = res.data.data;
 
+        // Fetch OLD information from database
         setForm({
           name: user.name || "",
           email: user.email || "",
@@ -60,22 +63,25 @@ function EditProfile() {
           postalCode: user.postalCode || "",
         });
 
+        // Existing Cloudinary image
         setPreview(user.profilePic || "");
       }
     } catch (error) {
-      console.log("Profile error:", error);
+      console.log(error);
 
       toast.error(
-        error.response?.data?.message || "Unable to load profile"
+        error.response?.data?.message ||
+          "Unable to load profile"
       );
     } finally {
       setLoading(false);
     }
   };
 
-  // =========================
+  // =====================================
   // INPUT CHANGE
-  // =========================
+  // =====================================
+
   const handleChange = (e) => {
     setForm({
       ...form,
@@ -83,15 +89,15 @@ function EditProfile() {
     });
   };
 
-  // =========================
-  // IMAGE CHANGE
-  // =========================
+  // =====================================
+  // PROFILE IMAGE
+  // =====================================
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
 
     if (!file) return;
 
-    // Only allow images
     if (!file.type.startsWith("image/")) {
       toast.error("Please select an image");
       return;
@@ -99,13 +105,13 @@ function EditProfile() {
 
     setProfilePic(file);
 
-    const imageUrl = URL.createObjectURL(file);
-    setPreview(imageUrl);
+    setPreview(URL.createObjectURL(file));
   };
 
-  // =========================
-  // UPDATE PROFILE
-  // =========================
+  // =====================================
+  // SAVE PROFILE
+  // =====================================
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -114,8 +120,11 @@ function EditProfile() {
 
       const formData = new FormData();
 
-      // Email is intentionally NOT included
+      // Name CAN be changed
       formData.append("name", form.name);
+
+      // Email is NOT sent because it cannot be changed
+
       formData.append("phone", form.phone);
       formData.append("address", form.address);
       formData.append("city", form.city);
@@ -133,9 +142,11 @@ function EditProfile() {
       if (res.data.success) {
         toast.success("Profile updated successfully");
 
-        // Only basic information stays in localStorage
-        localStorage.setItem("name", res.data.data.name);
-        localStorage.setItem("email", res.data.data.email);
+        // Update only display information that is safe
+        localStorage.setItem(
+          "name",
+          res.data.data.name
+        );
 
         navigate("/");
       }
@@ -151,9 +162,10 @@ function EditProfile() {
     }
   };
 
-  // =========================
+  // =====================================
   // LOADING
-  // =========================
+  // =====================================
+
   if (loading) {
     return (
       <section className="min-h-screen bg-stone-50 px-6 py-16">
@@ -166,11 +178,17 @@ function EditProfile() {
     );
   }
 
+  // =====================================
+  // PAGE
+  // =====================================
+
   return (
     <section className="min-h-screen bg-stone-50 px-6 py-12">
+
       <div className="mx-auto max-w-3xl">
 
-        {/* Back Button */}
+        {/* Back */}
+
         <button
           type="button"
           onClick={() => navigate("/")}
@@ -180,11 +198,12 @@ function EditProfile() {
           Back
         </button>
 
-        {/* Main Card */}
+        {/* Card */}
+
         <div className="rounded-2xl border border-stone-200 bg-white p-6 shadow-xl md:p-8">
 
-          {/* Heading */}
           <div className="mb-8">
+
             <h1 className="text-3xl font-black text-slate-950">
               Edit Profile
             </h1>
@@ -192,11 +211,15 @@ function EditProfile() {
             <p className="mt-2 text-slate-500">
               Update your personal information and profile picture.
             </p>
+
           </div>
 
           <form onSubmit={handleSubmit}>
 
-            {/* ================= PROFILE IMAGE ================= */}
+            {/* ========================= */}
+            {/* PROFILE PICTURE */}
+            {/* ========================= */}
+
             <div className="mb-8 flex flex-col items-center">
 
               <div className="relative">
@@ -216,7 +239,6 @@ function EditProfile() {
                   </div>
                 )}
 
-                {/* Camera */}
                 <label
                   htmlFor="profilePic"
                   className="absolute bottom-1 right-1 grid h-10 w-10 cursor-pointer place-items-center rounded-full bg-emerald-700 text-white shadow-lg transition hover:bg-emerald-800"
@@ -240,11 +262,16 @@ function EditProfile() {
 
             </div>
 
-            {/* ================= NAME + EMAIL ================= */}
+            {/* ========================= */}
+            {/* NAME + EMAIL */}
+            {/* ========================= */}
+
             <div className="grid gap-5 md:grid-cols-2">
 
-              {/* Name */}
+              {/* NAME - EDITABLE */}
+
               <div>
+
                 <label className="mb-2 block font-bold text-slate-950">
                   Name
                 </label>
@@ -257,10 +284,13 @@ function EditProfile() {
                   required
                   className="w-full rounded-lg border border-stone-300 px-4 py-3 outline-none transition focus:border-emerald-700"
                 />
+
               </div>
 
-              {/* Email - LOCKED */}
+              {/* EMAIL - NOT EDITABLE */}
+
               <div>
+
                 <label className="mb-2 block font-bold text-slate-950">
                   Email
                 </label>
@@ -275,11 +305,15 @@ function EditProfile() {
                 <p className="mt-1 text-xs text-slate-400">
                   Email address cannot be changed.
                 </p>
+
               </div>
 
             </div>
 
-            {/* ================= PHONE ================= */}
+            {/* ========================= */}
+            {/* PHONE */}
+            {/* ========================= */}
+
             <div className="mt-5">
 
               <label className="mb-2 block font-bold text-slate-950">
@@ -297,7 +331,10 @@ function EditProfile() {
 
             </div>
 
-            {/* ================= ADDRESS ================= */}
+            {/* ========================= */}
+            {/* ADDRESS */}
+            {/* ========================= */}
+
             <div className="mt-5">
 
               <label className="mb-2 block font-bold text-slate-950">
@@ -315,10 +352,12 @@ function EditProfile() {
 
             </div>
 
-            {/* ================= CITY + POSTAL ================= */}
+            {/* ========================= */}
+            {/* CITY + POSTAL CODE */}
+            {/* ========================= */}
+
             <div className="mt-5 grid gap-5 md:grid-cols-2">
 
-              {/* City */}
               <div>
 
                 <label className="mb-2 block font-bold text-slate-950">
@@ -336,7 +375,6 @@ function EditProfile() {
 
               </div>
 
-              {/* Postal Code */}
               <div>
 
                 <label className="mb-2 block font-bold text-slate-950">
@@ -356,7 +394,10 @@ function EditProfile() {
 
             </div>
 
-            {/* ================= BUTTONS ================= */}
+            {/* ========================= */}
+            {/* BUTTONS */}
+            {/* ========================= */}
+
             <div className="mt-8 flex gap-4">
 
               <button
@@ -374,14 +415,19 @@ function EditProfile() {
               >
                 <FontAwesomeIcon icon={faSave} />
 
-                {saving ? "Saving..." : "Save Profile"}
+                {saving
+                  ? "Saving..."
+                  : "Save Profile"}
               </button>
 
             </div>
 
           </form>
+
         </div>
+
       </div>
+
     </section>
   );
 }
