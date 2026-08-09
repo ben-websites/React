@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import {
   NavLink,
@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import Swal from "sweetalert2";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import axios from "axios";
 
 import {
   faBars,
@@ -53,6 +54,9 @@ const links = [
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+  const [profilePic, setProfilePic] = useState(
+  localStorage.getItem("profilePic") || ""
+);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -63,6 +67,32 @@ function Navbar() {
   const role = localStorage.getItem("role");
   const name = localStorage.getItem("name");
   const email = localStorage.getItem("email");
+  useEffect(() => {
+  const userId = localStorage.getItem("userId");
+
+  if (!userId || !token) return;
+
+  const getProfilePicture = async () => {
+    try {
+      const res = await axios.get(
+        `https://bens-store.vercel.app/profile/${userId}`
+      );
+
+      if (res.data.success) {
+        const user = res.data.data;
+
+        if (user.profilePic) {
+          setProfilePic(user.profilePic);
+          localStorage.setItem("profilePic", user.profilePic);
+        }
+      }
+    } catch (error) {
+      console.log("Navbar profile error:", error);
+    }
+  };
+
+  getProfilePicture();
+}, [token]);
 
   // Don't show navbar in admin panel
   if (location.pathname.startsWith("/admin")) {
@@ -263,12 +293,22 @@ function Navbar() {
 
                   <div className="flex items-center gap-4 border-b border-stone-200 pb-4">
 
-                    <div className="grid h-16 w-16 place-items-center rounded-full bg-emerald-100 text-emerald-700">
-                      <FontAwesomeIcon
-                        icon={faUser}
-                        className="text-2xl"
-                      />
-                    </div>
+                   <div className="h-16 w-16 overflow-hidden rounded-full border-2 border-emerald-100 bg-emerald-100">
+  {profilePic ? (
+    <img
+      src={profilePic}
+      alt="Profile"
+      className="h-full w-full object-cover"
+    />
+  ) : (
+    <div className="grid h-full w-full place-items-center text-emerald-700">
+      <FontAwesomeIcon
+        icon={faUser}
+        className="text-2xl"
+      />
+    </div>
+  )}
+</div>
 
                     <div>
                       <h3 className="text-lg font-black text-slate-950">
