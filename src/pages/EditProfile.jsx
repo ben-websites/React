@@ -136,6 +136,10 @@ function EditProfile() {
           "name",
           res.data.user.name
         );
+        localStorage.setItem(
+  "profilePic",
+  res.data.user.profilePic || ""
+);
 
         navigate("/");
       }
