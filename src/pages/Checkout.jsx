@@ -135,8 +135,12 @@ function Checkout() {
             onChange={handleChange}
             className="w-full rounded-lg border p-3"
           >
-            <option>Cash on Delivery</option>
-            <option>Card Payment</option>
+             <option value="Cash on Delivery">
+               Cash on Delivery
+             </option>
+             <option value="Card">
+              Card Payment
+             </option>
           </select>
 
           <button
