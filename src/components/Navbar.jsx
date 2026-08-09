@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import {
   NavLink,
@@ -21,7 +21,6 @@ import {
   faPenToSquare,
 } from "@fortawesome/free-solid-svg-icons";
 
-import axios from "axios";
 import { useCart } from "../contextApi/CartDataContext";
 
 const links = [
@@ -53,13 +52,7 @@ const links = [
 
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
-
   const [profileOpen, setProfileOpen] = useState(false);
-
-  const [settings, setSettings] = useState({
-    storeName: "Ben Store",
-    maintenanceMode: false,
-  });
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -69,24 +62,7 @@ function Navbar() {
   const token = localStorage.getItem("token");
   const role = localStorage.getItem("role");
   const name = localStorage.getItem("name");
-
-  useEffect(() => {
-    fetchSettings();
-  }, []);
-
-  async function fetchSettings() {
-    try {
-      const res = await axios.get(
-        "https://bens-store.vercel.app/settings"
-      );
-
-      if (res.data.success) {
-        setSettings(res.data.data);
-      }
-    } catch (error) {
-      console.log("Settings error:", error);
-    }
-  }
+  const email = localStorage.getItem("email");
 
   // Don't show navbar in admin panel
   if (location.pathname.startsWith("/admin")) {
@@ -110,6 +86,11 @@ function Navbar() {
       localStorage.removeItem("token");
       localStorage.removeItem("role");
       localStorage.removeItem("name");
+      localStorage.removeItem("email");
+      localStorage.removeItem("userId");
+
+      setProfileOpen(false);
+      setMenuOpen(false);
 
       toast.success("Logged out successfully");
 
@@ -119,24 +100,25 @@ function Navbar() {
 
   return (
     <nav className="sticky top-0 z-50 border-b border-stone-200 bg-white shadow-sm">
-  <div className="relative mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+      <div className="relative mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
 
-        {/* Logo */}
+        {/* LOGO */}
 
         <NavLink
           to="/"
           className="flex items-center gap-3"
+          onClick={() => setMenuOpen(false)}
         >
           <div className="grid h-10 w-10 place-items-center rounded bg-emerald-700 text-white">
             <FontAwesomeIcon icon={faShirt} />
           </div>
 
           <span className="text-2xl font-black text-black">
-            {settings.storeName}
+            Ben's Store
           </span>
         </NavLink>
 
-        {/* Mobile button */}
+        {/* MOBILE MENU BUTTON */}
 
         <button
           type="button"
@@ -148,13 +130,15 @@ function Navbar() {
           />
         </button>
 
+        {/* NAVIGATION */}
+
         <div
           className={`${
             menuOpen ? "flex" : "hidden"
           } absolute left-0 top-[73px] z-50 w-full flex-col gap-3 bg-white p-5 md:static md:flex md:w-auto md:flex-row md:items-center md:p-0`}
         >
 
-          {/* Normal Links */}
+          {/* NORMAL LINKS */}
 
           {links.map((link) => (
             <NavLink
@@ -173,7 +157,7 @@ function Navbar() {
             </NavLink>
           ))}
 
-          {/* Admin Dashboard */}
+          {/* ADMIN DASHBOARD */}
 
           {token && role === "admin" && (
             <NavLink
@@ -192,7 +176,7 @@ function Navbar() {
             </NavLink>
           )}
 
-          {/* Login / Register */}
+          {/* LOGIN / REGISTER */}
 
           {!token && (
             <>
@@ -228,7 +212,7 @@ function Navbar() {
             </>
           )}
 
-          {/* Cart */}
+          {/* CART */}
 
           {token && role === "user" && (
             <NavLink
@@ -252,112 +236,111 @@ function Navbar() {
             </NavLink>
           )}
 
-          {/* User */}
+          {/* USER PROFILE */}
 
           {token && (
-  <>
-    {/* USER PROFILE BUTTON */}
+            <>
+              <button
+                type="button"
+                onClick={() => setProfileOpen(!profileOpen)}
+                className="inline-flex items-center gap-2 rounded-lg bg-white px-4 py-2 text-sm font-semibold text-slate-800 transition hover:bg-stone-100"
+              >
+                <FontAwesomeIcon icon={faUser} />
 
-    <button
-      type="button"
-      onClick={() => setProfileOpen(!profileOpen)}
-      className="inline-flex items-center gap-2 rounded-lg bg-white px-4 py-2 text-sm font-semibold text-slate-800 transition hover:bg-stone-100"
-    >
-      {localStorage.getItem("profilePic") ? (
-        <img
-          src={localStorage.getItem("profilePic")}
-          alt="Profile"
-          className="h-7 w-7 rounded-full object-cover"
-        />
-      ) : (
-        <FontAwesomeIcon icon={faUser} />
-      )}
+                {name || "User"}
 
-      {name}
+                <span className="text-xs">
+                  {profileOpen ? "▲" : "▼"}
+                </span>
+              </button>
 
-      <span className="text-xs">▼</span>
-    </button>
+              {/* PROFILE POPUP */}
 
-    {/* PROFILE POPUP */}
+              {profileOpen && (
+                <div className="absolute right-28 top-16 z-[100] w-80 rounded-xl border border-stone-200 bg-white p-5 shadow-2xl">
 
-    {profileOpen && (
-      <div className="absolute right-28 top-16 z-[100] w-80 rounded-xl border border-stone-200 bg-white p-5 shadow-2xl">
+                  {/* PROFILE HEADER */}
 
-        <div className="flex items-center gap-4 border-b border-stone-200 pb-4">
+                  <div className="flex items-center gap-4 border-b border-stone-200 pb-4">
 
-          {localStorage.getItem("profilePic") ? (
-            <img
-              src={localStorage.getItem("profilePic")}
-              alt="Profile"
-              className="h-16 w-16 rounded-full object-cover"
-            />
-          ) : (
-            <div className="grid h-16 w-16 place-items-center rounded-full bg-emerald-100 text-emerald-700">
-              <FontAwesomeIcon
-                icon={faUser}
-                className="text-2xl"
-              />
-            </div>
+                    <div className="grid h-16 w-16 place-items-center rounded-full bg-emerald-100 text-emerald-700">
+                      <FontAwesomeIcon
+                        icon={faUser}
+                        className="text-2xl"
+                      />
+                    </div>
+
+                    <div>
+                      <h3 className="text-lg font-black text-slate-950">
+                        {name || "User"}
+                      </h3>
+
+                      <p className="text-sm text-slate-500">
+                        {role === "admin" ? "Administrator" : "Customer"}
+                      </p>
+                    </div>
+
+                  </div>
+
+                  {/* PROFILE DETAILS */}
+
+                  <div className="space-y-4 py-5">
+
+                    <div>
+                      <p className="text-xs font-semibold text-slate-400">
+                        Name
+                      </p>
+
+                      <p className="font-semibold text-slate-800">
+                        {name || "Not provided"}
+                      </p>
+                    </div>
+
+                    <div>
+                      <p className="text-xs font-semibold text-slate-400">
+                        Email
+                      </p>
+
+                      <p className="break-all font-semibold text-slate-800">
+                        {email || "Not provided"}
+                      </p>
+                    </div>
+
+                  </div>
+
+                  {/* EDIT PROFILE */}
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setProfileOpen(false);
+                      setMenuOpen(false);
+                      navigate("/profile/edit");
+                    }}
+                    className="flex w-full items-center justify-center gap-2 rounded-lg bg-emerald-700 px-4 py-3 font-bold text-white transition hover:bg-emerald-800"
+                  >
+                    <FontAwesomeIcon icon={faPenToSquare} />
+
+                    Edit Profile
+                  </button>
+
+                </div>
+              )}
+
+              {/* LOGOUT */}
+
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="inline-flex items-center gap-2 rounded bg-red-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-700"
+              >
+                <FontAwesomeIcon icon={faRightFromBracket} />
+
+                Logout
+              </button>
+            </>
           )}
 
-          <div>
-            <h3 className="text-lg font-black text-slate-950">
-              {localStorage.getItem("name")}
-            </h3>
-
-            <p className="text-sm text-slate-500">
-              Customer
-            </p>
-          </div>
-
-        </div>
-
-        <div className="space-y-3 py-4">
-
-          <div>
-            <p className="text-xs font-semibold text-slate-400">
-              Name
-            </p>
-
-            <p className="font-semibold text-slate-800">
-              {localStorage.getItem("name")}
-            </p>
-          </div>
-
-          <div>
-            <p className="text-xs font-semibold text-slate-400">
-              Email
-            </p>
-
-            <p className="font-semibold text-slate-800">
-              {localStorage.getItem("email")}
-            </p>
-          </div>
-
-        </div>
-
-        <button
-          type="button"
-          onClick={() => navigate("/profile/edit")}
-          className="flex w-full items-center justify-center gap-2 rounded-lg bg-emerald-700 px-4 py-3 font-bold text-white transition hover:bg-emerald-800"
-        >
-          <FontAwesomeIcon icon={faPenToSquare} />
-          Edit Profile
-        </button>
-
-      </div>
-    )}
-
-    <button
-      onClick={handleLogout}
-      className="inline-flex items-center gap-2 rounded bg-red-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-700"
-    >
-      <FontAwesomeIcon icon={faRightFromBracket} />
-      Logout
-    </button>
-  </>
-)}
-          )}
         </div>
       </div>
     </nav>
