@@ -134,7 +134,7 @@ function EditProfile() {
         // Update only display information that is safe
         localStorage.setItem(
           "name",
-          res.data.data.name
+          res.data.user.name
         );
 
         navigate("/");
