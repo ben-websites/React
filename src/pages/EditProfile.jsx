@@ -124,7 +124,7 @@ function EditProfile() {
       }
 
       const res = await axios.put(
-        `https://bens-store.vercel.app/updateprofile/${userId}`,
+        `https://bens-store.vercel.app/profile/${userId}`,
         formData
       );
 
