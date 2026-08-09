@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import {
   NavLink,
@@ -20,19 +20,43 @@ import {
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 
+import axios from "axios";
 import { useCart } from "../contextApi/CartDataContext";
 
 const links = [
-  { path: "/", label: "Home" },
-  { path: "/products", label: "Products" },
-  { path: "/about", label: "About" },
-  { path: "/contact", label: "Contact" },
-  { path: "/services", label: "Services" },
-  { path: "/myorders", label: "My Orders" },
+  {
+    path: "/",
+    label: "Home",
+  },
+  {
+    path: "/products",
+    label: "Products",
+  },
+  {
+    path: "/about",
+    label: "About",
+  },
+  {
+    path: "/contact",
+    label: "Contact",
+  },
+  {
+    path: "/services",
+    label: "Services",
+  },
+  {
+    path: "/myorders",
+    label: "My Orders",
+  },
 ];
 
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+
+  const [settings, setSettings] = useState({
+    storeName: "Ben Store",
+    maintenanceMode: false,
+  });
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -42,6 +66,24 @@ function Navbar() {
   const token = localStorage.getItem("token");
   const role = localStorage.getItem("role");
   const name = localStorage.getItem("name");
+
+  useEffect(() => {
+    fetchSettings();
+  }, []);
+
+  async function fetchSettings() {
+    try {
+      const res = await axios.get(
+        "https://bens-store.vercel.app/settings"
+      );
+
+      if (res.data.success) {
+        setSettings(res.data.data);
+      }
+    } catch (error) {
+      console.log("Settings error:", error);
+    }
+  }
 
   // Don't show navbar in admin panel
   if (location.pathname.startsWith("/admin")) {
@@ -76,44 +118,41 @@ function Navbar() {
     <nav className="border-b border-stone-200 bg-white shadow-sm">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
 
-        {/* LOGO */}
+        {/* Logo */}
+
         <NavLink
           to="/"
           className="flex items-center gap-3"
-          onClick={() => setMenuOpen(false)}
         >
-          <div className="grid h-11 w-11 place-items-center rounded-lg bg-emerald-700 text-white">
-            <FontAwesomeIcon icon={faShirt} className="text-xl" />
+          <div className="grid h-10 w-10 place-items-center rounded bg-emerald-700 text-white">
+            <FontAwesomeIcon icon={faShirt} />
           </div>
 
-          <div>
-            <h1 className="text-2xl font-black text-black">
-              Ben Store
-            </h1>
-
-            <p className="text-xs font-medium text-slate-500">
-              Fashion & Lifestyle
-            </p>
-          </div>
+          <span className="text-2xl font-black text-black">
+            {settings.storeName}
+          </span>
         </NavLink>
 
-        {/* MOBILE MENU BUTTON */}
+        {/* Mobile button */}
+
         <button
           type="button"
           onClick={() => setMenuOpen(!menuOpen)}
           className="grid h-10 w-10 place-items-center rounded border border-stone-300 bg-white md:hidden"
         >
-          <FontAwesomeIcon icon={menuOpen ? faXmark : faBars} />
+          <FontAwesomeIcon
+            icon={menuOpen ? faXmark : faBars}
+          />
         </button>
 
-        {/* DESKTOP / MOBILE MENU */}
         <div
           className={`${
             menuOpen ? "flex" : "hidden"
-          } absolute left-0 top-[73px] z-50 w-full flex-col gap-3 border-b border-stone-200 bg-white p-5 shadow-md md:static md:flex md:w-auto md:flex-row md:items-center md:border-0 md:p-0 md:shadow-none`}
+          } absolute left-0 top-[73px] z-50 w-full flex-col gap-3 bg-white p-5 md:static md:flex md:w-auto md:flex-row md:items-center md:p-0`}
         >
 
-          {/* MAIN LINKS */}
+          {/* Normal Links */}
+
           {links.map((link) => (
             <NavLink
               key={link.path}
@@ -123,7 +162,7 @@ function Navbar() {
                 `rounded px-3 py-2 text-sm font-semibold transition ${
                   isActive
                     ? "bg-emerald-700 text-white"
-                    : "text-slate-700 hover:bg-emerald-700 hover:text-white"
+                    : "hover:bg-emerald-700 hover:text-white"
                 }`
               }
             >
@@ -131,7 +170,8 @@ function Navbar() {
             </NavLink>
           ))}
 
-          {/* ADMIN DASHBOARD */}
+          {/* Admin Dashboard */}
+
           {token && role === "admin" && (
             <NavLink
               to="/admin"
@@ -140,7 +180,7 @@ function Navbar() {
                 `inline-flex items-center gap-2 rounded px-4 py-2 text-sm font-semibold transition ${
                   isActive
                     ? "bg-emerald-700 text-white"
-                    : "bg-white text-slate-700 hover:bg-emerald-700 hover:text-white"
+                    : "bg-white hover:bg-emerald-700 hover:text-white"
                 }`
               }
             >
@@ -149,13 +189,20 @@ function Navbar() {
             </NavLink>
           )}
 
-          {/* LOGIN / REGISTER */}
+          {/* Login / Register */}
+
           {!token && (
             <>
               <NavLink
                 to="/login"
                 onClick={() => setMenuOpen(false)}
-                className="inline-flex items-center gap-2 rounded bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-blue-600 hover:text-white"
+                className={({ isActive }) =>
+                  `inline-flex items-center gap-2 rounded px-4 py-2 text-sm font-semibold transition ${
+                    isActive
+                      ? "bg-blue-600 text-white"
+                      : "bg-white hover:bg-blue-600 hover:text-white"
+                  }`
+                }
               >
                 <FontAwesomeIcon icon={faRightToBracket} />
                 Login
@@ -164,7 +211,13 @@ function Navbar() {
               <NavLink
                 to="/register"
                 onClick={() => setMenuOpen(false)}
-                className="inline-flex items-center gap-2 rounded bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-emerald-700 hover:text-white"
+                className={({ isActive }) =>
+                  `inline-flex items-center gap-2 rounded px-4 py-2 text-sm font-semibold transition ${
+                    isActive
+                      ? "bg-emerald-700 text-white"
+                      : "bg-white hover:bg-emerald-700 hover:text-white"
+                  }`
+                }
               >
                 <FontAwesomeIcon icon={faUserPlus} />
                 Register
@@ -172,7 +225,8 @@ function Navbar() {
             </>
           )}
 
-          {/* CART */}
+          {/* Cart */}
+
           {token && role === "user" && (
             <NavLink
               to="/cart"
@@ -181,7 +235,7 @@ function Navbar() {
                 `relative inline-flex items-center gap-2 rounded px-4 py-2 text-sm font-bold transition ${
                   isActive
                     ? "bg-emerald-700 text-white"
-                    : "bg-white text-slate-700 hover:bg-emerald-700 hover:text-white"
+                    : "bg-white hover:bg-emerald-700 hover:text-white"
                 }`
               }
             >
@@ -195,10 +249,11 @@ function Navbar() {
             </NavLink>
           )}
 
-          {/* USER INFO + LOGOUT */}
+          {/* User */}
+
           {token && (
             <>
-              <div className="inline-flex items-center gap-2 rounded bg-stone-100 px-4 py-2 text-sm font-semibold text-slate-800">
+              <div className="inline-flex items-center gap-2 rounded bg-white px-4 py-2 text-sm font-semibold text-slate-800">
                 <FontAwesomeIcon icon={faUser} />
                 {name}
               </div>
@@ -212,7 +267,6 @@ function Navbar() {
               </button>
             </>
           )}
-
         </div>
       </div>
     </nav>
