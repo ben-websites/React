@@ -20,6 +20,7 @@ import NotFound from "./pages/NotFound";
 import Checkout from "./pages/Checkout";
 import MyOrders from "./pages/MyOrders";
 import MyOrderDetails from "./pages/MyOrderDetails";
+import EditProfile from "./pages/EditProfile";
 
 
 import AdminLayout from "./admin/AdminLayout";
@@ -155,6 +156,13 @@ function App() {
                   </UserRoute>
                 }
               />
+                <Route
+                   path="/profile/edit"
+                   element={
+                     <UserRoute>
+                      <EditProfile />}
+                    </UserRoute>
+               />
                 <Route
                   path="*"
                   element={
