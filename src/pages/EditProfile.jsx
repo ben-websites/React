@@ -31,10 +31,7 @@ function EditProfile() {
   const [profilePic, setProfilePic] = useState(null);
   const [preview, setPreview] = useState("");
 
-  // =====================================
-  // FETCH EXISTING USER PROFILE
-  // =====================================
-
+ 
   useEffect(() => {
     if (!userId) {
       navigate("/login");
@@ -63,7 +60,6 @@ function EditProfile() {
           postalCode: user.postalCode || "",
         });
 
-        // Existing Cloudinary image
         setPreview(user.profilePic || "");
       }
     } catch (error) {
@@ -78,10 +74,6 @@ function EditProfile() {
     }
   };
 
-  // =====================================
-  // INPUT CHANGE
-  // =====================================
-
   const handleChange = (e) => {
     setForm({
       ...form,
@@ -89,9 +81,6 @@ function EditProfile() {
     });
   };
 
-  // =====================================
-  // PROFILE IMAGE
-  // =====================================
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
