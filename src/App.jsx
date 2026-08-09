@@ -32,7 +32,7 @@ import Messages from "./admin/Messages";
 import MessageDetails from "./admin/MessageDetails";
 import Customers from "./admin/Customers"
 import CustomerDetails from "./admin/CustomerDetails";
-import Settings from "./admin/Settings"
+import AdminSettings from "./admin/AdminSettings"
 import Statistics from "./admin/Statistics";
 import UserRoute from "./Protected/UserRoute";
 import AdminRoute from "./Protected/AdminRoute";
@@ -184,7 +184,7 @@ function App() {
                   <Route path="messages" element={<Messages />} />
                   <Route path="messages/:id" element={<MessageDetails />} />
                   <Route path="statistics" element={<Statistics />} />
-                  <Route path="settings" element={<Settings />} />
+                  <Route path="settings" element={<AdminSettings />} />
                   <Route path="*" element={<NotFoundAdmin />} />
 
                 </Route>
