@@ -71,41 +71,45 @@ useEffect(() => {
     <section className="min-h-screen bg-[#f8f5ef] p-8">
 
 
-      <div className="mb-10 flex items-center justify-between">
+     <div className="mb-10 flex items-center justify-between">
 
-        <div>
-          <h1 className="text-4xl font-black text-slate-900">
-            Admin Dashboard
-          </h1>
+  <div>
+    <h1 className="text-4xl font-black text-slate-900">
+      Admin Dashboard
+    </h1>
 
-          <p className="mt-2 text-slate-500">
-            Manage your store from one place.
-          </p>
-        </div>
-        
+    <p className="mt-2 text-slate-500">
+      Manage your store from one place.
+    </p>
+  </div>
 
-        <Link
-          to="/admin/products"
-          className="flex items-center gap-2 rounded-xl bg-emerald-700 px-6 py-3 font-semibold text-white transition hover:bg-emerald-800"
-        >
-          <FontAwesomeIcon icon={faPlus} />
-          Manage Products
-        </Link>
-        <div>
-           <button
-  onClick={() => navigate("/admin/notifications")}
-  className="relative flex h-12 w-12 items-center justify-center rounded-xl bg-white text-gray-700 shadow-sm transition hover:bg-gray-100"
->
-  <FontAwesomeIcon icon={faBell} className="text-xl" />
+  {/* Right side buttons */}
+  <div className="flex items-center gap-3">
 
-  {unreadCount > 0 && (
-    <span className="absolute -right-1 -top-1 flex h-6 min-w-6 items-center justify-center rounded-full bg-red-600 px-1.5 text-xs font-bold text-white">
-      {unreadCount > 99 ? "99+" : unreadCount}
-    </span>
-  )}
-</button>
-        </div>
-      </div>
+    <Link
+      to="/admin/products"
+      className="flex items-center gap-2 rounded-xl bg-emerald-700 px-6 py-3 font-semibold text-white transition hover:bg-emerald-800"
+    >
+      <FontAwesomeIcon icon={faPlus} />
+      Manage Products
+    </Link>
+
+    <button
+      onClick={() => navigate("/admin/notifications")}
+      className="relative flex h-12 w-12 items-center justify-center rounded-xl bg-white text-gray-700 shadow-sm transition hover:bg-gray-100"
+    >
+      <FontAwesomeIcon icon={faBell} className="text-xl" />
+
+      {unreadCount > 0 && (
+        <span className="absolute -right-1 -top-1 flex h-6 min-w-6 items-center justify-center rounded-full bg-red-600 px-1.5 text-xs font-bold text-white">
+          {unreadCount > 99 ? "99+" : unreadCount}
+        </span>
+      )}
+    </button>
+
+  </div>
+
+</div>
       
 
 
