@@ -4,7 +4,14 @@ import { Link } from 'react-router-dom'
 import { useCart } from '../contextApi/CartDataContext'
 
 function Cart() {
-  const { cartItems, cartTotal, removeFromCart, clearCart } = useCart()
+  const {
+  cartItems,
+  cartTotal,
+  removeFromCart,
+  clearCart,
+  storeOpen,
+  settingsLoading,
+} = useCart();
 
   function handleClearCart() {
     const confirmed = window.confirm('Do you really want to clear the cart?')
@@ -13,7 +20,28 @@ function Cart() {
       clearCart()
     }
   }
+  if (!settingsLoading && !storeOpen) {
+  return (
+    <section className="mx-auto w-full max-w-6xl px-6 py-20 text-center">
+      <h1 className="text-4xl font-black text-slate-950">
+        Store Currently Closed
+      </h1>
 
+      <p className="mx-auto mt-4 max-w-xl text-slate-500">
+        Our store is currently closed. You can still browse our products,
+        but adding items to the cart and placing orders is temporarily
+        unavailable.
+      </p>
+
+      <Link
+        to="/products"
+        className="mt-8 inline-flex items-center rounded-lg bg-emerald-700 px-6 py-3 font-bold text-white transition hover:bg-slate-950"
+      >
+        Browse Products
+      </Link>
+    </section>
+  );
+}
   if (cartItems.length === 0) {
     return (
       <section className="mx-auto grid min-h-[62vh] max-w-6xl place-items-center px-4 py-16 text-center sm:px-6 lg:px-8">
