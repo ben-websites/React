@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
+import { faBell } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
 
 import {
   faBoxOpen,
@@ -41,7 +43,30 @@ function Dashboard() {
   useEffect(() => {
     getDashboard();
   }, []);
+  const navigate = useNavigate();
+const [unreadCount, setUnreadCount] = useState(0);
 
+useEffect(() => {
+  const getUnreadCount = async () => {
+    try {
+      const response = await axios.get(
+        "https://bens-store.vercel.app/notifications/unread"
+      );
+
+      if (response.data.success) {
+        setUnreadCount(response.data.count);
+      }
+    } catch (error) {
+      console.log("Notification count error:", error);
+    }
+  };
+
+  getUnreadCount();
+
+  const interval = setInterval(getUnreadCount, 10000);
+
+  return () => clearInterval(interval);
+}, []);
   return (
     <section className="min-h-screen bg-[#f8f5ef] p-8">
 
@@ -57,6 +82,18 @@ function Dashboard() {
             Manage your store from one place.
           </p>
         </div>
+        <button
+  onClick={() => navigate("/admin/notifications")}
+  className="relative flex h-12 w-12 items-center justify-center rounded-xl bg-white text-gray-700 shadow-sm transition hover:bg-gray-100"
+>
+  <FontAwesomeIcon icon={faBell} className="text-xl" />
+
+  {unreadCount > 0 && (
+    <span className="absolute -right-1 -top-1 flex h-6 min-w-6 items-center justify-center rounded-full bg-red-600 px-1.5 text-xs font-bold text-white">
+      {unreadCount > 99 ? "99+" : unreadCount}
+    </span>
+  )}
+</button>
 
         <Link
           to="/admin/products"
