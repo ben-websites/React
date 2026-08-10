@@ -54,6 +54,7 @@ const links = [
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+  const { storeOpen, settingsLoading } = useCart();
   const [profilePic, setProfilePic] = useState(
   localStorage.getItem("profilePic") || ""
 );
@@ -393,6 +394,11 @@ function Navbar() {
         </div>
       </div>
     </nav>
+     {!settingsLoading && !storeOpen && (
+        <div className="w-full bg-red-600 px-4 py-3 text-center font-semibold text-white">
+          Store is closed right now. You can browse our products, but ordering is currently unavailable.
+        </div>
+      )}
   );
 }
 
