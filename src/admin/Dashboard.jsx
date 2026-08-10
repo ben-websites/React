@@ -82,6 +82,16 @@ useEffect(() => {
             Manage your store from one place.
           </p>
         </div>
+        
+
+        <Link
+          to="/admin/products"
+          className="flex items-center gap-2 rounded-xl bg-emerald-700 px-6 py-3 font-semibold text-white transition hover:bg-emerald-800"
+        >
+          <FontAwesomeIcon icon={faPlus} />
+          Manage Products
+        </Link>
+
         <button
   onClick={() => navigate("/admin/notifications")}
   className="relative flex h-12 w-12 items-center justify-center rounded-xl bg-white text-gray-700 shadow-sm transition hover:bg-gray-100"
@@ -94,14 +104,6 @@ useEffect(() => {
     </span>
   )}
 </button>
-
-        <Link
-          to="/admin/products"
-          className="flex items-center gap-2 rounded-xl bg-emerald-700 px-6 py-3 font-semibold text-white transition hover:bg-emerald-800"
-        >
-          <FontAwesomeIcon icon={faPlus} />
-          Manage Products
-        </Link>
 
       </div>
 
