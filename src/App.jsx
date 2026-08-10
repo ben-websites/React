@@ -38,6 +38,7 @@ import Statistics from "./admin/Statistics";
 import UserRoute from "./Protected/UserRoute";
 import AdminRoute from "./Protected/AdminRoute";
 import NotFoundAdmin from "./admin/NotFoundAdmin";
+import Notifications from "./admin/Notifications";
 
 
 function App() {
@@ -194,6 +195,7 @@ function App() {
                   <Route path="messages/:id" element={<MessageDetails />} />
                   <Route path="statistics" element={<Statistics />} />
                   <Route path="settings" element={<AdminSettings />} />
+                  <Route path="notifications" element={<Notifications />} />
                   <Route path="*" element={<NotFoundAdmin />} />
 
                 </Route>
