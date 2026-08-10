@@ -91,8 +91,8 @@ useEffect(() => {
           <FontAwesomeIcon icon={faPlus} />
           Manage Products
         </Link>
-
-        <button
+      </div>
+       <button
   onClick={() => navigate("/admin/notifications")}
   className="relative flex h-12 w-12 items-center justify-center rounded-xl bg-white text-gray-700 shadow-sm transition hover:bg-gray-100"
 >
@@ -104,8 +104,6 @@ useEffect(() => {
     </span>
   )}
 </button>
-
-      </div>
 
 
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
