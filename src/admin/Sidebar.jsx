@@ -2,7 +2,8 @@ import { NavLink, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import LogoutModal from "../components/LogoutModel";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 import {
   faChartLine,
@@ -12,10 +13,34 @@ import {
   faEnvelope,
   faGear,
   faArrowRightFromBracket,
+  faBell,
 } from "@fortawesome/free-solid-svg-icons";
 
 function Sidebar() {
+  const [unreadCount, setUnreadCount] = useState(0);
 
+useEffect(() => {
+  const getUnreadCount = async () => {
+    try {
+      const response = await axios.get(
+        "https://bens-store.vercel.app/notifications/unread"
+      );
+
+      if (response.data.success) {
+        setUnreadCount(response.data.count);
+      }
+    } catch (error) {
+      console.log("Notification count error:", error);
+    }
+  };
+
+  getUnreadCount();
+
+  // Check for new notifications every 10 seconds
+  const interval = setInterval(getUnreadCount, 10000);
+
+  return () => clearInterval(interval);
+}, []);
   const navigate = useNavigate();
   const [showLogout, setShowLogout] = useState(false);
   
@@ -37,6 +62,11 @@ function Sidebar() {
       icon: faBoxOpen,
       path: "/admin",
     },
+    {
+       title: "Notifications",
+       icon: faBell,
+       path: "/admin/notifications",
+     },
     {
       title: "Products",
       icon: faBoxOpen,
@@ -108,9 +138,15 @@ function Sidebar() {
               className="text-lg"
             />
 
-            <span className="font-semibold">
-              {item.title}
-            </span>
+            <span className="flex-1 font-semibold">
+  {item.title}
+</span>
+
+{item.title === "Notifications" && unreadCount > 0 && (
+  <span className="flex h-6 min-w-6 items-center justify-center rounded-full bg-red-600 px-2 text-xs font-bold text-white">
+    {unreadCount > 99 ? "99+" : unreadCount}
+  </span>
+)}
 
           </NavLink>
 
