@@ -19,8 +19,7 @@ import { useCart } from "../contextApi/CartDataContext";
 function ProductDetails() {
   const { id } = useParams();
 
-  const { addToCart, cartItems } = useCart();
-
+  const { addToCart, cartItems, storeOpen, settingsLoading } = useCart();
   const [product, setProduct] = useState(null);
 
   const [loading, setLoading] = useState(true);
@@ -213,21 +212,29 @@ function ProductDetails() {
 
           </div>
 
-          <button
-            onClick={() => addToCart(product)}
-            disabled={alreadyInCart}
-            className={`mt-10 flex items-center gap-3 rounded-xl px-8 py-4 text-lg font-bold text-white transition ${
-              alreadyInCart
-                ? "cursor-not-allowed bg-amber-600"
-                : "bg-emerald-700 hover:bg-emerald-800"
-            }`}
-          >
-            <FontAwesomeIcon icon={faBagShopping} />
+         <button
+  onClick={() => addToCart(product)}
+  disabled={
+    settingsLoading ||
+    !storeOpen ||
+    alreadyInCart
+  }
+  className={`mt-10 flex items-center gap-3 rounded-xl px-8 py-4 text-lg font-bold text-white transition ${
+    !storeOpen
+      ? "cursor-not-allowed bg-slate-400"
+      : alreadyInCart
+      ? "cursor-not-allowed bg-amber-600"
+      : "bg-emerald-700 hover:bg-emerald-800"
+  }`}
+>
+  <FontAwesomeIcon icon={faBagShopping} />
 
-            {alreadyInCart
-              ? "Already in Cart"
-              : "Add to Cart"}
-          </button>
+  {!storeOpen
+    ? "Store Closed"
+    : alreadyInCart
+    ? "Already in Cart"
+    : "Add to Cart"}
+</button>
 
         </div>
 
