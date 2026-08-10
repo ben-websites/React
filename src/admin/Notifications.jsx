@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Loader from "../components/Loader";
 import {
   faBell,
   faCheck,
@@ -41,10 +42,7 @@ function Notifications() {
     fetchNotifications();
   }, []);
 
-  // =====================================
-  // MARK ONE AS READ
-  // =====================================
-
+  
   const markAsRead = async (id) => {
     try {
       const res = await axios.put(
@@ -70,10 +68,7 @@ function Notifications() {
     }
   };
 
-  // =====================================
-  // MARK ALL AS READ
-  // =====================================
-
+ 
   const markAllAsRead = async () => {
     try {
       const res = await axios.put(
@@ -124,15 +119,7 @@ function Notifications() {
   // LOADING
   // =====================================
 
-  if (loading) {
-    return (
-      <div className="flex min-h-[400px] items-center justify-center">
-        <p className="text-slate-500">
-          Loading notifications...
-        </p>
-      </div>
-    );
-  }
+    if (loading) return <Loader />;
 
   // =====================================
   // PAGE
