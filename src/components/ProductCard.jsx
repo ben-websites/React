@@ -9,7 +9,12 @@ import { Link } from "react-router-dom";
 import { useCart } from "../contextApi/CartDataContext";
 
 function ProductCard({ product }) {
-  const { addToCart, cartItems } = useCart();
+  const {
+  addToCart,
+  cartItems,
+  storeOpen,
+  settingsLoading,
+} = useCart();
 
   const alreadyInCart = cartItems.some(
     (item) => item._id === product._id
@@ -87,27 +92,36 @@ function ProductCard({ product }) {
 
         <div className="mt-4 flex gap-3">
 
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              addToCart(product);
-            }}
-            disabled={alreadyInCart || product.stock === 0}
-            className={`flex-1 rounded-lg py-3 font-semibold transition ${
-              alreadyInCart
-                ? "cursor-not-allowed bg-amber-500 text-white"
-                : product.stock === 0
-                ? "cursor-not-allowed bg-gray-400 text-white"
-                : "bg-emerald-700 text-white hover:bg-emerald-800"
-            }`}
-          >
-            <FontAwesomeIcon icon={faBagShopping} />{" "}
-            {alreadyInCart
-              ? "Added"
-              : product.stock === 0
-              ? "Out of Stock"
-              : "Add to Cart"}
-          </button>
+         <button
+  onClick={(e) => {
+    e.preventDefault();
+    addToCart(product);
+  }}
+  disabled={
+    settingsLoading ||
+    !storeOpen ||
+    alreadyInCart ||
+    product.stock === 0
+  }
+  className={`flex-1 rounded-lg py-3 font-semibold transition ${
+    !storeOpen
+      ? "cursor-not-allowed bg-slate-400 text-white"
+      : alreadyInCart
+      ? "cursor-not-allowed bg-amber-500 text-white"
+      : product.stock === 0
+      ? "cursor-not-allowed bg-gray-400 text-white"
+      : "bg-emerald-700 text-white hover:bg-emerald-800"
+  }`}
+>
+  <FontAwesomeIcon icon={faBagShopping} />{" "}
+  {!storeOpen
+    ? "Store Closed"
+    : alreadyInCart
+    ? "Added"
+    : product.stock === 0
+    ? "Out of Stock"
+    : "Add to Cart"}
+</button>
 
           <Link
             to={`/products/${product._id}`}
