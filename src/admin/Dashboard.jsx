@@ -241,7 +241,7 @@ useEffect(() => {
       </div>
 
 
-      <div className="mt-10 grid gap-8 lg:grid-cols-3">     
+      <div className="mt-10 grid gap-15 lg:grid-cols-3">     
 
       <div className="lg:col-span-2 rounded-2xl bg-white p-6 shadow-lg">
 
