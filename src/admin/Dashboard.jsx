@@ -290,7 +290,7 @@ useEffect(() => {
 
           <div className="overflow-x-auto">
 
-            <table className="w-full">
+            <table className="w-full border-separate border-spacing-x-6">
 
               <thead>
 
